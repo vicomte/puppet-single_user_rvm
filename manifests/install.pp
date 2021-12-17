@@ -92,7 +92,8 @@ define single_user_rvm::install (
   $home         = undef,
   $proxy        = undef,
   $auto_upgrade = false,
-  $path		= undef
+  $path         = undef,
+  $unprivileged = false,
 ) {
 
   if $home {
@@ -126,7 +127,7 @@ define single_user_rvm::install (
   exec { $import_key_1:
     path        => $pathstr,
     user        => $user,
-    onlyif      => "test `$gpg_cmd --list-keys | grep '409B6B1796C275462A1703113804BB82D39DC0E3' | wc -l` -eq 0",
+    onlyif      => "test `$gpg_cmd --list-keys | grep 'D39DC0E3' | wc -l` -eq 0", # short key version
     cwd         => $homedir,
     environment => "HOME=${homedir}",
   }
@@ -135,7 +136,7 @@ define single_user_rvm::install (
   exec { $import_key_2:
     path        => $pathstr,
     user        => $user,
-    onlyif      => "test `$gpg_cmd --list-keys | grep '7D2BAF1CF37B13E2069D6956105BD0E739499BDB' | wc -l` -eq 0",
+    onlyif      => "test `$gpg_cmd --list-keys | grep '39499BDB' | wc -l` -eq 0", # short key version
     cwd         => $homedir,
     environment => "HOME=${homedir}",
   }
@@ -147,7 +148,25 @@ define single_user_rvm::install (
     user        => $user,
     cwd         => $homedir,
     environment => "HOME=${homedir}",
-    require     => [ Package['curl'], Package['bash'], User[$user], Exec[$import_key_1], Exec[$import_key_2] ],
+    require     => [
+      Package['curl'],
+      Package['bash'],
+      User[$user],
+      Exec[$import_key_1],
+      Exec[$import_key_2],
+    ],
+  }
+
+  # unprivileged users cannot run the commands needed to make autolibs work
+  if $unprivileged {
+    exec { 'rvm autolibs disable':
+      path        => "${homedir}/.rvm/bin:/usr/bin:/usr/sbin:/bin",
+      user        => $user,
+      cwd         => $homedir,
+      environment => "HOME=${homedir}",
+      refreshonly => true,
+      subscribe   => Exec[$install_command],
+    }
   }
 
   $rvm_executable = "${homedir}/.rvm/bin/rvm"
