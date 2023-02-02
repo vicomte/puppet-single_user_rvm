@@ -164,7 +164,7 @@ define single_user_rvm::install_ruby (
     timeout     => 3600, # takes too long... lets give it some time
     require     => Single_user_rvm::Install[$user],
     cwd         => $homedir,
-    environment => ${env},
+    environment => $env,
     user        => $user,
   }
 }
