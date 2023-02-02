@@ -107,7 +107,7 @@ define single_user_rvm::install_ruby (
     $pathstr = '/usr/bin:/usr/sbin:/bin:/sbin'
   }
 
-  if $environemnt {
+  if $environment {
     $env = $environment
   } else {
     $env = ''
