@@ -107,22 +107,23 @@ define single_user_rvm::install_ruby (
     $pathstr = '/usr/bin:/usr/sbin:/bin:/sbin'
   }
 
+  if $home {
+    $homedir = $home
+  } else {
+    $homedir = "/home/${user}"
+  }
+
   if $environment {
     $env = $environment
   } else {
-    $env = ''
+    $env = []
   }
+  $env = $env + ["HOME=${homedir}"]
 
   if $other_args {
     $other = $other_args
   } else {
     $other = ''
-  }
-
-  if $home {
-    $homedir = $home
-  } else {
-    $homedir = "/home/${user}"
   }
 
   if $force_binary {
@@ -163,7 +164,7 @@ define single_user_rvm::install_ruby (
     timeout     => 3600, # takes too long... lets give it some time
     require     => Single_user_rvm::Install[$user],
     cwd         => $homedir,
-    environment => "HOME=${homedir} ${env}",
+    environment => ${env},
     user        => $user,
   }
 }
