@@ -155,7 +155,7 @@ define single_user_rvm::install_ruby (
     $proxy_opt = ''
   }
 
-  $command = "${env} ${homedir}/.rvm/bin/rvm ${proxy_opt} install ${ruby_string} ${binary_opt} ${disable_binary_opt} ${movable_opt} ${verify_downloads_opt} ${other}"
+  $command = "${homedir}/.rvm/bin/rvm ${proxy_opt} install ${ruby_string} ${binary_opt} ${disable_binary_opt} ${movable_opt} ${verify_downloads_opt} ${other}"
 
   exec { $command:
     path        => $pathstr,
@@ -163,7 +163,7 @@ define single_user_rvm::install_ruby (
     timeout     => 3600, # takes too long... lets give it some time
     require     => Single_user_rvm::Install[$user],
     cwd         => $homedir,
-    environment => "HOME=${homedir}",
+    environment => "HOME=${homedir} ${env}",
     user        => $user,
   }
 }
