@@ -114,11 +114,11 @@ define single_user_rvm::install_ruby (
   }
 
   if $environment {
-    $env = $environment
+    $tEnv = $environment
   } else {
-    $env = []
+    $tEnv = []
   }
-  $env = $env + ["HOME=${homedir}"]
+  $env = $tEnv + ["HOME=${homedir}"]
 
   if $other_args {
     $other = $other_args
