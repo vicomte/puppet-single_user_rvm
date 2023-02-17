@@ -17,6 +17,7 @@ class single_user_rvm::dependencies {
       if ! defined(Package['bzip2'])           { package { 'bzip2':           ensure => present } }
       if ! defined(Package['ca-certificates']) { package { 'ca-certificates': ensure => present } }
       if ! defined(Package['gawk'])            { package { 'gawk':            ensure => present } }
+      if ! defined(Package['gnupg2'])          { package { 'gnupg2':          ensure => present } }
 
       # Generic Ruby dependencies
       if ! defined(Package['g++'])              { package { 'g++':              ensure => present } }
@@ -26,8 +27,7 @@ class single_user_rvm::dependencies {
       if ! defined(Package['patch'])            { package { 'patch':            ensure => present } }
       if ! defined(Package['openssl'])          { package { 'openssl':          ensure => present } }
       if ! defined(Package['ca-certificates'])  { package { 'ca-certificates':  ensure => present } }
-      if ! defined(Package['libreadline6'])     { package { 'libreadline6':     ensure => present } }
-      if ! defined(Package['libreadline6-dev']) { package { 'libreadline6-dev': ensure => present } }
+      if ! defined(Package['libreadline6-dev']) { package { 'libreadline6-dev': ensure => present, allow_virtual => true, } }
       if ! defined(Package['curl'])             { package { 'curl':             ensure => present } }
       if ! defined(Package['zlib1g'])           { package { 'zlib1g':           ensure => present } }
       if ! defined(Package['zlib1g-dev'])       { package { 'zlib1g-dev':       ensure => present } }
@@ -43,6 +43,7 @@ class single_user_rvm::dependencies {
       if ! defined(Package['bison'])            { package { 'bison':            ensure => present } }
       if ! defined(Package['pkg-config'])       { package { 'pkg-config':       ensure => present } }
       if ! defined(Package['libffi-dev'])       { package { 'libffi-dev':       ensure => present } }
+      if ! defined(Package['libgmp-dev'])       { package { 'libgmp-dev':       ensure => present } }
     }
     'RedHat', 'Amazon': {
       # RVM dependencies
@@ -50,6 +51,7 @@ class single_user_rvm::dependencies {
       if ! defined(Package['curl'])            { package { 'curl':          ensure => present } }
       if ! defined(Package['patch'])           { package { 'patch':         ensure => present } }
       if ! defined(Package['bzip2'])           { package { 'bzip2':         ensure => present } }
+      if ! defined(Package['gnupg2'])          { package { 'gnupg2':        ensure => present } }
 
       # Generic Ruby dependencies
       if ! defined(Package['gcc-c++'])        { package { 'gcc-c++':        ensure => present } }
