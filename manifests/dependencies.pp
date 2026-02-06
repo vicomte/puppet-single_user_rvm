@@ -8,7 +8,7 @@
 #
 #
 class single_user_rvm::dependencies {
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Ubuntu', 'Debian': {
       # RVM dependencies
       if ! defined(Package['bash'])            { package { 'bash':            ensure => present } }
@@ -72,7 +72,7 @@ class single_user_rvm::dependencies {
       if ! defined(Package['bison'])          { package { 'bison':          ensure => present } }
       if ! defined(Package['libffi-devel'])   { package { 'libffi-devel':   ensure => present } }
     }
-    'Darwin': {
+    'Darwin', 'macOS': {
       # RVM dependencies
       if ! defined(Package['bash'])            { package { 'bash':            ensure => present } }
       if ! defined(Package['curl'])            { package { 'curl':            ensure => present } }
@@ -99,7 +99,7 @@ class single_user_rvm::dependencies {
       if ! defined(Package['libffi'])          { package { 'libffi':           ensure => present } }
     }
     default: {
-      fail("Your osfamily (${::osfamily}) is not supported. PR are welcome")
+      fail("Your osfamily (${facts['os']['family']}) is not supported. PR are welcome")
     }
   }
 }
