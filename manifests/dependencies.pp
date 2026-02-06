@@ -8,7 +8,7 @@
 #
 #
 class single_user_rvm::dependencies {
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Ubuntu', 'Debian': {
       # RVM dependencies
       if ! defined(Package['bash'])            { package { 'bash':            ensure => present } }
@@ -99,7 +99,7 @@ class single_user_rvm::dependencies {
       if ! defined(Package['libffi'])          { package { 'libffi':           ensure => present } }
     }
     default: {
-      fail("Your osfamily (${::osfamily}) is not supported. PR are welcome")
+      fail("Your osfamily (${facts['os']['family']}) is not supported. PR are welcome")
     }
   }
 }
