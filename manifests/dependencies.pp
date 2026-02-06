@@ -72,7 +72,7 @@ class single_user_rvm::dependencies {
       if ! defined(Package['bison'])          { package { 'bison':          ensure => present } }
       if ! defined(Package['libffi-devel'])   { package { 'libffi-devel':   ensure => present } }
     }
-    'Darwin': {
+    'Darwin', 'macOS': {
       # RVM dependencies
       if ! defined(Package['bash'])            { package { 'bash':            ensure => present } }
       if ! defined(Package['curl'])            { package { 'curl':            ensure => present } }
