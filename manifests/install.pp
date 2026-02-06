@@ -117,6 +117,7 @@ define single_user_rvm::install (
     $proxy_opt = ''
   }
 
+
   if $facts['os']['family'] == 'Darwin' {
     if $::architecture == 'arm64' {
       $gpg_cmd = '/opt/homebrew/bin/gpg'
