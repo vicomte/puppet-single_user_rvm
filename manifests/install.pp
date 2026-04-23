@@ -181,10 +181,12 @@ define single_user_rvm::install (
 
     exec { $upgrade_command:
       path        => $pathstr,
+      command     => "${upgrade_command} && touch ${homedir}/.rvm/.last_upgrade",
       user        => $user,
       cwd         => $homedir,
       environment => "HOME=${homedir}",
       require     => Exec[$install_command],
+      unless      => "/usr/bin/find ${homedir}/.rvm/.last_upgrade -mtime -7 2>/dev/null | /usr/bin/grep -q .",
     }
 
   } else {
