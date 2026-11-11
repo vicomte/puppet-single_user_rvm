@@ -131,7 +131,7 @@ define single_user_rvm::install (
   exec { $import_key_1:
     path        => $pathstr,
     user        => $user,
-    onlyif      => "test `$gpg_cmd --list-keys | grep 'D39DC0E3' | wc -l` -eq 0", # short key version
+    onlyif      => "$gpg_cmd --version >/dev/null 2>&1 && test `$gpg_cmd --list-keys | grep 'D39DC0E3' | wc -l` -eq 0", # short key version
     cwd         => $homedir,
     environment => "HOME=${homedir}",
   }
@@ -140,7 +140,7 @@ define single_user_rvm::install (
   exec { $import_key_2:
     path        => $pathstr,
     user        => $user,
-    onlyif      => "test `$gpg_cmd --list-keys | grep '39499BDB' | wc -l` -eq 0", # short key version
+    onlyif      => "$gpg_cmd --version >/dev/null 2>&1 && test `$gpg_cmd --list-keys | grep '39499BDB' | wc -l` -eq 0", # short key version
     cwd         => $homedir,
     environment => "HOME=${homedir}",
   }
@@ -180,10 +180,12 @@ define single_user_rvm::install (
 
     exec { $upgrade_command:
       path        => $pathstr,
+      command     => "${upgrade_command} && touch ${homedir}/.rvm/.last_upgrade",
       user        => $user,
       cwd         => $homedir,
       environment => "HOME=${homedir}",
       require     => Exec[$install_command],
+      unless      => "/usr/bin/find ${homedir}/.rvm/.last_upgrade -mtime -7 2>/dev/null | /usr/bin/grep -q .",
     }
 
   } else {
